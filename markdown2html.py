@@ -18,5 +18,21 @@ if __name__ == "__main__":
         sys.stderr.write(f"Missing {input_filename}\n")
         sys.exit(1)
 
-    # If all checks pass, exit successfully
-    sys.exit(0)
+    try:
+        with open(input_filename, "r") as input_file, \
+                open(output_filename, "w") as output_file:
+            for line in input_file:
+                line = line.strip()
+                if line.startswith("#"):
+                    heading_level = len(line.split(" ")[0])
+                    if 1 <= heading_level <= 6:
+                        content = line[heading_level:].strip()
+                        line = f"<h{heading_level}>{content}</h{heading_level}>"
+                # Write the processed line to the output file
+                output_file.write(line + "\n")
+
+        # Exit successfully
+        sys.exit(0)
+    except Exception as e:
+        sys.stderr.write(f"Error: {e}\n")
+        sys.exit(1)
