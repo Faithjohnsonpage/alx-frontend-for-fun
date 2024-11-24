@@ -20,14 +20,20 @@ if __name__ == "__main__":
 
     try:
         with open(input_filename, "r") as input_file, open(output_filename, "w") as output_file:
-            in_list = False  # Track whether we are inside a list
+            in_unordered_list = False  # Track whether we are inside an unordered list
+            in_ordered_list = False
             for line in input_file:
                 line = line.strip()
 
-                # End the list if necessary
-                if in_list and not line.startswith('- '):
+                # End the unordered list if necessary
+                if in_unordered_list and not line.startswith('- '):
                     output_file.write("</ul>\n")  # Close the list
-                    in_list = False
+                    in_unordered_list = False
+
+                # End the ordered list if necessary
+                if in_ordered_list and not line.startswith('* '):
+                    output_file.write("</ol>\n")
+                    in_ordered_list = False
 
                 # Check for headings
                 if line.startswith("#"):
@@ -36,17 +42,29 @@ if __name__ == "__main__":
                         content = line[heading_level:].strip()
                         output_file.write(f"<h{heading_level}>{content}</h{heading_level}>\n")
 
-                # Check for list items
+                # Check for unordered list items
                 elif line.startswith('- '):
-                    if not in_list:
+                    if not in_unordered_list:
                         output_file.write("<ul>\n")  # Start a new unordered list
-                        in_list = True
+                        in_unordered_list = True
                     content = line[2:].strip()  # Remove "- " prefix
                     output_file.write(f"<li>{content}</li>\n")
 
+                # Check for unordered list items
+                elif line.startswith('* '):
+                    if not in_ordered_list:
+                        output_file.write("<ol>\n")
+                        in_ordered_list = True
+                    content = line[2:].strip()
+                    output_file.write(f"<li>{content}</li>\n")
+
             # If the file ends while inside a list, close the list
-            if in_list:
+            if in_unordered_list:
                 output_file.write("</ul>\n")
+
+            # If the file ends while inside a list, close the list
+            if in_ordered_list:
+                output_file.write("</ol>\n")
 
         # Exit successfully
         sys.exit(0)

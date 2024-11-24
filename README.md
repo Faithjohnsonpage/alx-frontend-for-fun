@@ -10,3 +10,7 @@ These are solutions to task on Markdown to HTML
 - Hello
 # Little
 - Bye
+
+* Hello
+# King
+* Bye
