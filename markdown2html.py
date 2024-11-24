@@ -19,17 +19,34 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        with open(input_filename, "r") as input_file, \
-                open(output_filename, "w") as output_file:
+        with open(input_filename, "r") as input_file, open(output_filename, "w") as output_file:
+            in_list = False  # Track whether we are inside a list
             for line in input_file:
                 line = line.strip()
+
+                # End the list if necessary
+                if in_list and not line.startswith('- '):
+                    output_file.write("</ul>\n")  # Close the list
+                    in_list = False
+
+                # Check for headings
                 if line.startswith("#"):
                     heading_level = len(line.split(" ")[0])
                     if 1 <= heading_level <= 6:
                         content = line[heading_level:].strip()
-                        line = f"<h{heading_level}>{content}</h{heading_level}>"
-                # Write the processed line to the output file
-                output_file.write(line + "\n")
+                        output_file.write(f"<h{heading_level}>{content}</h{heading_level}>\n")
+
+                # Check for list items
+                elif line.startswith('- '):
+                    if not in_list:
+                        output_file.write("<ul>\n")  # Start a new unordered list
+                        in_list = True
+                    content = line[2:].strip()  # Remove "- " prefix
+                    output_file.write(f"<li>{content}</li>\n")
+
+            # If the file ends while inside a list, close the list
+            if in_list:
+                output_file.write("</ul>\n")
 
         # Exit successfully
         sys.exit(0)
