@@ -2,6 +2,17 @@
 """This module converts a Markdown file to an HTML file."""
 import sys
 import os
+import hashlib
+
+
+def md5_hash(content):
+    """Convert content to its MD5 hash in lowercase."""
+    return hashlib.md5(content.encode()).hexdigest()
+
+
+def remove_c(content):
+    """Remove all occurrences of 'c' or 'C' from the content."""
+    return content.replace('c', '').replace('C', '')
 
 
 if __name__ == "__main__":
@@ -25,9 +36,6 @@ if __name__ == "__main__":
             in_paragraph = False  # Track whether we are inside a paragraph
             for line in input_file:
                 line = line.strip()
-
-                if len(line) != 0:
-                    character = line[0] # Get the first character
 
                 # End the unordered list if necessary
                 if in_unordered_list and not line.startswith('- '):
@@ -86,6 +94,28 @@ if __name__ == "__main__":
                 elif line.startswith('__') and line.endswith('__'):
                     content = line.strip('__')
                     output_file.write(f'<p>\n<em>{content}</em>\n</p>\n')
+
+                elif '[[' in line and ']]' in line:
+                    start = line.find('[[') + 2
+                    end = line.find(']]')
+                    to_hash = line[start:end]
+                    hashed_content = md5_hash(to_hash)
+                    line = line[:start - 2] + hashed_content + line[end + 2:]
+                    if not in_paragraph:
+                        output_file.write("<p>\n")
+                        in_paragraph = True
+                    output_file.write(line + "\n")
+
+                elif '((' in line and '))' in line:
+                    start = line.find('((') + 2
+                    end = line.find('))')
+                    to_process = line[start:end]
+                    processed_content = remove_c(to_process)
+                    line = line[:start - 2] + processed_content + line[end + 2:]
+                    if not in_paragraph:
+                        output_file.write("<p>\n")
+                        in_paragraph = True
+                    output_file.write(line + "\n")
 
                 # Handle paragraphs
                 elif line:
