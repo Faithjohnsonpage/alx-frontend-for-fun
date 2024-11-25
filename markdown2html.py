@@ -57,6 +57,12 @@ if __name__ == "__main__":
                         output_file.write("<ul>\n")  # Start a new unordered list
                         in_unordered_list = True
                     content = line[2:].strip()  # Remove "- " prefix
+                    if '**' in content:
+                        content = content.replace('**', '<b>', 1)
+                        content = content.replace('**', '</b>', 1)
+                    if '__' in content:
+                        content = content.replace('__', '<em>', 1)
+                        content = content.replace('__', '</em>', 1)
                     output_file.write(f"<li>{content}</li>\n")
 
                 # Check for unordered list items
@@ -65,7 +71,21 @@ if __name__ == "__main__":
                         output_file.write("<ol>\n")
                         in_ordered_list = True
                     content = line[2:].strip()
+                    if '**' in content:
+                        content = content.replace('**', '<b>', 1)
+                        content = content.replace('**', '</b>', 1)
+                    if '__' in content:
+                        content = content.replace('__', '<em>', 1)
+                        content = content.replace('__', '</em>', 1)
                     output_file.write(f"<li>{content}</li>\n")
+
+                elif line.startswith('**') and line.endswith('**'):
+                    content = line.strip('**')
+                    output_file.write(f'<p>\n<b>{content}</b>\n</p>\n')
+
+                elif line.startswith('__') and line.endswith('__'):
+                    content = line.strip('__')
+                    output_file.write(f'<p>\n<em>{content}</em>\n</p>\n')
 
                 # Handle paragraphs
                 elif line:
@@ -74,6 +94,12 @@ if __name__ == "__main__":
                         in_paragraph = True
                     else:
                         output_file.write("<br />\n")
+                    if '**' in line:
+                        line = line.replace('**', '<b>', 1)
+                        line = line.replace('**', '</b>', 1)
+                    if '__' in line:
+                        line = line.replace('__', '<em>', 1)
+                        line = line.replace('__', '</em>', 1)
                     output_file.write(line + "\n")
 
             # Close any remaining open tags
