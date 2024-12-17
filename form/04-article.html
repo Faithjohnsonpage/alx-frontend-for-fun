@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Raleway:700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="01-styles.css">
+    <link rel="stylesheet" href="04-styles.css">
   </head>
   <body>
     <!– Header –>
@@ -148,6 +148,55 @@
 			  <p>All fields are required.</p>
 			</header>
 			<form action="#" method="post">
+			  <fieldset>
+			    <legend class="visually-hidden">Your personal information</legend>
+				<div class="form-group col-1-2">
+				  <label for="your-first-name">First Name</label>
+				  <div class="form-field">
+				    <span class="form-field-container">
+					  <input type="text" name="your-first-name" id="your-first-name" placeholder="e.g. Mike" pattern="[A-Za-zÀ-ž\s]{3,}" max="35" autocomplete="on" accesskey="f" required></input>
+					</span>
+				  </div>
+				</div>
+				<div class="form-group col-1-2">
+				  <label for="your-last-name">Last Name</label>
+				  <div class="form-field">
+				    <span class="form-field-container">
+					  <input type="text" name="your-last-name" id="your-last-name" placeholder="e.g. Smith" pattern="[A-Za-zÀ-ž\s]{3,}" max="40" autocomplete="on" accesskey="l" required></input>
+					</span>
+				  </div>
+				</div>
+				<div class="form-group col-2-3">
+				  <label for="your-email">Email</label>
+				  <div class="form-field">
+				    <span class="form-field-container">
+					  <input type="email" name="your-email" id="your-email" placeholder="e.g. youremail@gmail.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" max="55" autocomplete="on" accesskey="e" required></input>
+					</span>
+				  </div>
+				</div>
+			  </fieldset>
+			  <fieldset>
+			    <legend class="visually-hidden">Your comment</legend>
+				<div class="form-group col-2-3">
+				  <label for="your-title">Title</label>
+				  <div class="form-field">
+				    <span class="form-field-container">
+					  <input type="text" name="your-title" id="your-title" placeholder="e.g. I loved that article" pattern="[A-Za-zÀ-ž\s]{4,}" max="75" autocomplete="on" accesskey="t" required></input>
+					</span>
+				  </div>
+				</div>
+				<div class="form-group col-2-3">
+				  <label for="your-comment">Comment</label>
+				  <div class="form-field">
+				    <span class="form-field-container">
+					  <textarea name="your-comment" id="your-comment" placeholder="Write your comment here" max="10" accesskey="c" required cols="30" rows="6"></textarea>
+					</span>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <button class="button button-primary">Post my comment</button>
+				</div>
+			  </fieldset>
 			</form>
 		  </section>
         </div>
